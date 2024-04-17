@@ -342,7 +342,7 @@ def load_driver(driver_name, dry_run=False):
 
 # https://stackoverflow.com/questions/9535954/printing-lists-as-tabular-data
 def print_table(table: Sequence):
-    longest_cols = [(max([len(str(row[i])) for row in table]) + 1) for i in range(len(table[0]))]
+    longest_cols = [(max(len(str(row[i])) for row in table) + 1) for i in range(len(table[0]))]
     row_format = "".join(["{:<" + str(longest_col) + "}" for longest_col in longest_cols])
     for row in table:
         print(row_format.format(*row))
