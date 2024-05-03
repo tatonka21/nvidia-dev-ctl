@@ -1756,7 +1756,7 @@ class DevCtl:
             if pci_device is not None:
                 domains = pci_address_to_domain[pci_device.pci_address]
                 if not domains:
-                    domains = set([""])
+                    domains = {""}
 
                 for domain in domains:
                     domain_state = self.get_domain_state(domain, use_cache=True) if domain else ""
@@ -1782,7 +1782,7 @@ class DevCtl:
                     domains = mdev_uuid_to_domain[mdev_device.uuid]
 
                     if not domains:
-                        domains = set([mdev_device.nvidia.vm_name or ""])
+                        domains = {mdev_device.nvidia.vm_name or ""}
 
                     for domain in domains:
                         domain_state = self.get_domain_state(domain, use_cache=True) if domain else ""
@@ -1889,7 +1889,7 @@ class DevCtl:
                     domains = mdev_uuid_to_domain[mdev_device.uuid]
 
                     if not domains and mdev_device.nvidia:
-                        domains = set([mdev_device.nvidia.vm_name])
+                        domains = {mdev_device.nvidia.vm_name}
 
                     for domain in domains:
                         if domain and pci_device.driver != "nvidia":
