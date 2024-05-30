@@ -474,15 +474,15 @@ def bind_driver_to_pci_devices(
             path_waiter(driver_override_path)
         if not os.path.exists(driver_override_path):
             raise DriverOverridePathNotFound(driver_override_path)
-        LOG.info(dry_run_prefix + "Override driver %s for PCI device %s", driver_name, dev)
+        LOG.info("%sOverride driver %s for PCI device %s", dry_run_prefix, driver_name, dev)
         if not dry_run:
             with open(driver_override_path, "w") as f:
                 print(driver_name, file=f)
         driver_path = sysfs_pci_driver_path(driver_name)
         if not os.path.exists(driver_path):
-            LOG.info(dry_run_prefix + "Driver %s missing, try loading it first", driver_name)
+            LOG.info("%sDriver %s missing, try loading it first", dry_run_prefix, driver_name)
             load_driver(driver_name)
-        LOG.info(dry_run_prefix + "Bind driver %s to device %s", driver_name, dev)
+        LOG.info("%sBind driver %s to device %s", dry_run_prefix, driver_name, dev)
         if not dry_run:
             driver_bind_path = "/sys/bus/pci/drivers/{}/bind".format(driver_name)
             if path_waiter:
@@ -523,8 +523,7 @@ class MdevType:
             self.path_waiter(create_path)
         dry_run_prefix = "Dry run: " if dry_run else ""
         LOG.info(
-            dry_run_prefix + "Create mdev device with UUID %s on PCI address %s and with type %s",
-            uuid,
+            "%sCreate mdev device with UUID %s on PCI address %s and with type %s", dry_run_prefix, uuid,
             self.pci_address,
             self.type,
         )
@@ -540,8 +539,7 @@ class MdevType:
             self.path_waiter(remove_path)
         dry_run_prefix = "Dry run: " if dry_run else ""
         LOG.info(
-            dry_run_prefix + "Remove mdev device with UUID %s on PCI address %s and with type %s",
-            uuid,
+            "%sRemove mdev device with UUID %s on PCI address %s and with type %s", dry_run_prefix, uuid,
             self.pci_address,
             self.type,
         )
@@ -1264,7 +1262,7 @@ class DevCtl:
     def restart_domain(self, domain: str, virsh_trials=60, virsh_delay=1.0, dry_run=False):
         dry_run_prefix = "Dry run: " if dry_run else ""
 
-        LOG.info(dry_run_prefix + "Shutdown domain %s", domain)
+        LOG.info("%sShutdown domain %s", dry_run_prefix, domain)
 
         if not dry_run:
             domain_running = True
@@ -1284,7 +1282,7 @@ class DevCtl:
             if domain_running:
                 raise DevCtlException("Could not stop domain %s", domain)
 
-        LOG.info(dry_run_prefix + "Start domain %s", domain)
+        LOG.info("%sStart domain %s", dry_run_prefix, domain)
 
         if not dry_run:
             domain_running = False
@@ -1498,7 +1496,7 @@ class DevCtl:
                 tmp_dev.write(dev_xml)
                 dev_fname = tmp_dev.name
 
-            LOG.info(dry_run_prefix + "Attach mdev device %s to domain %s", mdev_uuid, domain)
+            LOG.info("%sAttach mdev device %s to domain %s", dry_run_prefix, mdev_uuid, domain)
             if not dry_run:
 
                 if hotplug and domain_running:
@@ -1555,7 +1553,7 @@ class DevCtl:
                 tmp_dev.write(dev_xml)
                 dev_fname = tmp_dev.name
 
-            LOG.info(dry_run_prefix + "Detach mdev device %s from domain %s", mdev_uuid, domain)
+            LOG.info("%sDetach mdev device %s from domain %s", dry_run_prefix, mdev_uuid, domain)
             if not dry_run:
 
                 if hotplug and domain_running:
@@ -1619,7 +1617,7 @@ class DevCtl:
                 tmp_dev.write(dev_xml)
                 dev_fname = tmp_dev.name
 
-            LOG.info(dry_run_prefix + "Attach PCI device %s to domain %s", pci_address, domain)
+            LOG.info("%sAttach PCI device %s to domain %s", dry_run_prefix, pci_address, domain)
             if not dry_run:
 
                 if hotplug and domain_running:
@@ -1679,7 +1677,7 @@ class DevCtl:
                 tmp_dev.write(dev_xml)
                 dev_fname = tmp_dev.name
 
-            LOG.info(dry_run_prefix + "Detach PCI device %s from domain %s", pci_address, domain)
+            LOG.info("%sDetach PCI device %s from domain %s", dry_run_prefix, pci_address, domain)
             if not dry_run:
 
                 if hotplug and domain_running:
