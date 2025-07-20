@@ -31,10 +31,10 @@ import sys
 import tempfile
 import time
 import uuid
-import xml.etree.ElementTree as ET
 from collections import OrderedDict, defaultdict, namedtuple
 from subprocess import CalledProcessError
 from typing import Callable, Optional, Sequence, List, Union, NamedTuple, Dict
+import defusedxml.ElementTree
 
 LOG = logging.getLogger(__name__)
 
@@ -1314,7 +1314,7 @@ class DevCtl:
         all_domains = self.list_all_domains(use_cache=use_cache)
         for domain in all_domains:
             xml = self.dumpxml_of_domain(domain, use_cache=use_cache)
-            root = ET.fromstring(xml)
+            root = defusedxml.ElementTree.fromstring(xml)
             for pci_hostdev in root.findall("./devices/hostdev[@type='pci']"):
                 if pci_hostdev.attrib.get("mode") == "subsystem":
                     for address in pci_hostdev.findall("./source/address"):
@@ -1374,7 +1374,7 @@ class DevCtl:
         all_domains = self.list_all_domains(use_cache=use_cache)
         for domain in all_domains:
             xml = self.dumpxml_of_domain(domain, use_cache=use_cache)
-            root = ET.fromstring(xml)
+            root = defusedxml.ElementTree.fromstring(xml)
             for pci_hostdev in root.findall("./devices/hostdev[@type='mdev']"):
                 if (
                     pci_hostdev.attrib.get("mode") == "subsystem"
